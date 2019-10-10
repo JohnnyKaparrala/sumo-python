@@ -1,6 +1,6 @@
 from Position import Position2D
 class Circle():
-    def __init__(self
+    def __init__(self,
                  pos=Position2D(0,0),
                  r=20, #radius in pixels
     ):
