@@ -15,15 +15,11 @@ ADDR_SERV = "177.220.18.65"#177.220.18.66
 PORT_SERV = 12000
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 client_socket.settimeout(0.1)  
-ADDR = (ADDR_SERV, PORT_SERV)
-QTD_ACOES = 4
-
-UP = 0
-LEFT = 1
-DOWN = 2
-RIGHT = 3
 
 acoes = [False] * QTD_ACOES
+circulos_jogadores = {}
+
+mandar_pro_serv("com:ent")
 
 def ouvir_do_serv():
     while not done:

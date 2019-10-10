@@ -16,6 +16,7 @@ DOWN = 2
 RIGHT = 3
 
 server_socket.settimeout(0.1)
+circulos_jogadores = {}
 while True:
     try:
         message, address = server_socket.recvfrom(1024)
@@ -25,6 +26,7 @@ while True:
         if (address not in enderecos_ip):
             enderecos_ip.append(address)
             #print(str(enderecos_ip))
+            circulos_jogadores[str(address)] = (x,y)
             print ("endereco " + str(address) + " adicionado")
         
         if mes.split(":")[0] == "act":
