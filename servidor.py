@@ -1,7 +1,7 @@
 import socket
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-enderecos = []
+enderecos_ip = []
 try:
     server_socket.bind(('', 12000))
 except OSError:
@@ -21,8 +21,22 @@ while True:
         message, address = server_socket.recvfrom(1024)
         mes = message.decode()
         
-        print("msg de " + str(address) + "; msg: " + mes)
-        server_socket.sendto(mes.encode(), address)
+        print ("msg de " + str(address) + "; msg: " + mes)
+        if (address not in enderecos_ip):
+            enderecos_ip.append(address)
+            #print(str(enderecos_ip))
+            print ("endereco " + str(address) + " adicionado")
+        
+        if mes.split(":")[0] == "act":
+            #atualiza os objetos do game baseado na acao
+            print(enderecos_ip)
+            for add in enderecos_ip:#manda as novas prop dos objetos
+                print ("mandando " + mes)
+                try:
+                    server_socket.sendto(mes.encode(), add)
+                except:
+                    enderecos_ip.remove(add)
+
     except socket.timeout:
         if(recebendo):
-            print("um pacote foi perdido")
+            print ("um pacote foi perdido")

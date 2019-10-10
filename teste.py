@@ -29,12 +29,17 @@ def ouvir_do_serv():
     while not done:
         try:
             data, server = client_socket.recvfrom(1024)
-            print(data)
-            acoes[int(data.decode())] = True
+            mes  = data.decode()
+            if mes.split(":")[0] == "act":
+                #atualiza os objetos do game baseado na acao
+                if (mes.split(":")[1]).isdigit():
+                    acoes[int((mes.split(":")[1]))] = True
+            pass
         except socket.timeout:
             continue
 
 def mandar_pro_serv (conteudo):
+    #print(conteudo.decode())
     client_socket.sendto(conteudo, ADDR)
 
 ouvir = Thread(target = ouvir_do_serv, args = ())
@@ -48,10 +53,10 @@ while not done:
             
     pressed = pygame.key.get_pressed()
     
-    if pressed[pygame.K_UP]: mandar_pro_serv(str(UP).encode())
-    if pressed[pygame.K_DOWN]: mandar_pro_serv(str(DOWN).encode())
-    if pressed[pygame.K_LEFT]: mandar_pro_serv(str(LEFT).encode())
-    if pressed[pygame.K_RIGHT]: mandar_pro_serv(str(RIGHT).encode())
+    if pressed[pygame.K_UP]: mandar_pro_serv(("act:" + str(UP)).encode())
+    if pressed[pygame.K_DOWN]: mandar_pro_serv(("act:" + str(DOWN)).encode())
+    if pressed[pygame.K_LEFT]: mandar_pro_serv(("act:" + str(LEFT)).encode())
+    if pressed[pygame.K_RIGHT]: mandar_pro_serv(("act:" + str(RIGHT)).encode())
 
     if acoes[UP]:
         y -= 3
