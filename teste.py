@@ -1,36 +1,44 @@
 import pygame
 import time
 import socket
+from enums import *
 from threading import Thread
 
 pygame.init()
 screen = pygame.display.set_mode((400, 300))
 done = False
-x = 30
-y = 30
+
 
 clock = pygame.time.Clock()
-
-ADDR_SERV = "177.220.18.65"#177.220.18.66
-PORT_SERV = 12000
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 client_socket.settimeout(0.1)  
 
-acoes = [False] * QTD_ACOES
-circulos_jogadores = {}
+acoes = [False] * ActCon.QTD_ACOES
 
-mandar_pro_serv("com:ent")
+ADDR_SERV = "177.220.18.65"#177.220.18.66
+PORT_SERV = 12000
+ADDR = (ADDR_SERV, PORT_SERV)
+
+pygame.display.iconify()
+mandar_pro_serv(("com:" + str(Coms.ENTRAR)).encode())
+
+rikishis = {}
 
 def ouvir_do_serv():
     while not done:
         try:
             data, server = client_socket.recvfrom(1024)
-            mes  = data.decode()
-            if mes.split(":")[0] == "act":
+            mes = data.decode()
+            tipo = mes.split(":")[0]
+            comando = mes.split(":")[1]
+
+            if tipo == "act":
                 #atualiza os objetos do game baseado na acao
-                if (mes.split(":")[1]).isdigit():
-                    acoes[int((mes.split(":")[1]))] = True
-            pass
+                if comando.isdigit():
+                    acoes[int(comando)] = True
+            elif tipo == "gobj":
+                #rikishis[ip] = novo rikishi
+                pass
         except socket.timeout:
             continue
 
@@ -49,23 +57,10 @@ while not done:
             
     pressed = pygame.key.get_pressed()
     
-    if pressed[pygame.K_UP]: mandar_pro_serv(("act:" + str(UP)).encode())
-    if pressed[pygame.K_DOWN]: mandar_pro_serv(("act:" + str(DOWN)).encode())
-    if pressed[pygame.K_LEFT]: mandar_pro_serv(("act:" + str(LEFT)).encode())
-    if pressed[pygame.K_RIGHT]: mandar_pro_serv(("act:" + str(RIGHT)).encode())
-
-    if acoes[UP]:
-        y -= 3
-        acoes[UP] = False
-    if acoes[LEFT]:
-        x -= 3
-        acoes[LEFT] = False
-    if acoes[DOWN]:
-        y += 3
-        acoes[DOWN] = False
-    if acoes[RIGHT]:
-        x += 3
-        acoes[RIGHT] = False
+    if pressed[pygame.K_UP]: mandar_pro_serv(("act:" + str(ActCon.UP)).encode())
+    if pressed[pygame.K_DOWN]: mandar_pro_serv(("act:" + str(ActCon.DOWN)).encode())
+    if pressed[pygame.K_LEFT]: mandar_pro_serv(("act:" + str(ActCon.LEFT)).encode())
+    if pressed[pygame.K_RIGHT]: mandar_pro_serv(("act:" + str(ActCon.RIGHT)).encode())
     
     screen.fill((0, 0, 0))
     color = (255, 100, 0)

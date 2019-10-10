@@ -4,7 +4,7 @@ import pygame
 
 class Rikishi(Circle):
     
-    def __init__(self
+    def __init__(self,
                  pos=Position2D(0,0),
                  r=20, #radius in pixels
                  color = (155, 0, 0)
