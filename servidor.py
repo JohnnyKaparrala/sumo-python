@@ -3,6 +3,7 @@ from Rikishi import Rikishi
 from Position import Position2D
 from enums import *
 from Directions import Directions
+from threading import Thread
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 enderecos_ip = []
@@ -27,34 +28,34 @@ def broadcast (conteudo):
             #enderecos_ip.remove(add)
             pass
 def game_loop ():
-    for ip in rikishis:
-        if comandos_guardados_dos_rikishis[str(address)][ActCon.UP]:
-            rikishis[ip].accelToward(Directions.UP)
-            comandos_guardados_dos_rikishis[str(address)][ActCon.UP] = False
-        else
-            rikishis[ip].stopAccelToward(Directions.UP)
-        if comandos_guardados_dos_rikishis[str(address)][ActCon.LEFT]:
-            rikishis[ip].accelToward(Directions.LEFT)
-            comandos_guardados_dos_rikishis[str(address)][ActCon.LEFT] = False
-        else
-            rikishis[ip].stopAccelToward(Directions.LEFT)
-        if comandos_guardados_dos_rikishis[str(address)][ActCon.DOWN]:
-            rikishis[ip].accelToward(Directions.DOWN)
-            comandos_guardados_dos_rikishis[str(address)][ActCon.DOWN] = False
-        else
-            rikishis[ip].stopAccelToward(Directions.DOWN)
-        if comandos_guardados_dos_rikishis[str(address)][ActCon.RIGHT]:
-            rikishis[ip].accelToward(Directions.RIGHT)
-            comandos_guardados_dos_rikishis[str(address)][ActCon.RIGHT] = False
-        else
-            rikishis[ip].stopAccelToward(Directions.RIGHT)
+    while True:
+        for ip in rikishis:
+            if comandos_guardados_dos_rikishis[str(address)][ActCon.UP]:
+                rikishis[ip].accelToward(Directions.UP)
+                comandos_guardados_dos_rikishis[str(address)][ActCon.UP] = False
+            else:
+                rikishis[ip].stopAccelToward(Directions.UP)
+            if comandos_guardados_dos_rikishis[str(address)][ActCon.LEFT]:
+                rikishis[ip].accelToward(Directions.LEFT)
+                comandos_guardados_dos_rikishis[str(address)][ActCon.LEFT] = False
+            else:
+                rikishis[ip].stopAccelToward(Directions.LEFT)
+            if comandos_guardados_dos_rikishis[str(address)][ActCon.DOWN]:
+                rikishis[ip].accelToward(Directions.DOWN)
+                comandos_guardados_dos_rikishis[str(address)][ActCon.DOWN] = False
+            else:
+                rikishis[ip].stopAccelToward(Directions.DOWN)
+            if comandos_guardados_dos_rikishis[str(address)][ActCon.RIGHT]:
+                rikishis[ip].accelToward(Directions.RIGHT)
+                comandos_guardados_dos_rikishis[str(address)][ActCon.RIGHT] = False
+            else:
+                rikishis[ip].stopAccelToward(Directions.RIGHT)
 
-        rikishis[ip].process()
+            rikishis[ip].process()
 
 lop = Thread(target = game_loop, args = ())
+lop.start()
 while True:
-    lop.start()
-
     try:
         message, address = server_socket.recvfrom(1024)
         mes = message.decode()

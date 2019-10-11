@@ -1,5 +1,7 @@
 from Directions import Directions as Direc
 from Acceleration import Acceleration2D, Speed2D
+from Circle import Circle
+from Position import Position2D
 import pygame
 
 class Rikishi(Circle):

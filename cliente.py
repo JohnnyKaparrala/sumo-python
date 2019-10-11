@@ -13,16 +13,24 @@ clock = pygame.time.Clock()
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 client_socket.settimeout(0.1)  
 
-acoes = [False] * ActCon.QTD_ACOES
+actCon = ActCon()
+coms = Coms()
+
+acoes = [False] * (actCon.QTD_ACOES)
 
 ADDR_SERV = "177.220.18.65"#177.220.18.66
 PORT_SERV = 12000
 ADDR = (ADDR_SERV, PORT_SERV)
 
-pygame.display.iconify()
-mandar_pro_serv(("com:" + str(Coms.ENTRAR)).encode())
-
 rikishis = {}
+
+#pygame.display.iconify()
+
+def mandar_pro_serv (conteudo):
+    #print(conteudo.decode())
+    client_socket.sendto(conteudo, ADDR)
+
+mandar_pro_serv(("com:" + str(coms.ENTRAR)).encode())
 
 def ouvir_do_serv():
     while not done:
@@ -42,10 +50,6 @@ def ouvir_do_serv():
         except socket.timeout:
             continue
 
-def mandar_pro_serv (conteudo):
-    #print(conteudo.decode())
-    client_socket.sendto(conteudo, ADDR)
-
 ouvir = Thread(target = ouvir_do_serv, args = ())
 ouvir.start()
 
@@ -57,10 +61,10 @@ while not done:
             
     pressed = pygame.key.get_pressed()
     
-    if pressed[pygame.K_UP]: mandar_pro_serv(("act:" + str(ActCon.UP)).encode())
-    if pressed[pygame.K_DOWN]: mandar_pro_serv(("act:" + str(ActCon.DOWN)).encode())
-    if pressed[pygame.K_LEFT]: mandar_pro_serv(("act:" + str(ActCon.LEFT)).encode())
-    if pressed[pygame.K_RIGHT]: mandar_pro_serv(("act:" + str(ActCon.RIGHT)).encode())
+    if pressed[pygame.K_UP]: mandar_pro_serv(("act:" + str(actCon.UP)).encode())
+    if pressed[pygame.K_DOWN]: mandar_pro_serv(("act:" + str(actCon.DOWN)).encode())
+    if pressed[pygame.K_LEFT]: mandar_pro_serv(("act:" + str(actCon.LEFT)).encode())
+    if pressed[pygame.K_RIGHT]: mandar_pro_serv(("act:" + str(actCon.RIGHT)).encode())
     
     screen.fill((0, 0, 0))
     color = (255, 100, 0)
