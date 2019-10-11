@@ -6,10 +6,10 @@ class Position2D():
         self.Y = y
 
     def distance(self, pos2):
-        return math.sqrt((self.X - pos2.X)**2 + (self.Y - pos2)**2)
+        return math.sqrt((self.X - pos2.X)**2 + (self.Y - pos2.Y)**2)
 
     def toTuple(self):
-        return (self.X, self.Y)
+        return (int(self.X), int(self.Y))
     
     def __str__(self):
         return "({}, {})".format(self.X, self.Y)

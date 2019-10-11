@@ -11,5 +11,5 @@ class Circle():
         return (self.Centre.distance(other.Centre)-(self.Radius + other.Radius))
 
     def hasCollision(self, other):
-        return self.distance(self, other)<=0
+        return self.distance(other)<=0
     

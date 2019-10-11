@@ -1,6 +1,8 @@
 from Directions import Directions as Direc
 from Acceleration import Acceleration2D, Speed2D
-#import pygame
+from Circle import Circle
+from Position import Position2D
+import pygame
 
 class Rikishi(Circle):
     
@@ -10,20 +12,20 @@ class Rikishi(Circle):
                  color = (155, 0, 0)
     ):
         self.Centre = pos                 #(pixel, pixel)
-        self.Radius = Radius              #pixel
+        self.Radius = r                   #pixel
         self.Speed  = Speed2D(0,0)        #pixel/update
         self.Accel  = Acceleration2D(0,0) #pixel/update**2
         self.Color  = color
 
     def accelToward(self, dir):
         if(dir == Direc.UP):
-            self.Accel.Y = -0.1
+            self.Accel.Y = -0.25
         if(dir == Direc.DOWN):
-            self.Accel.Y = 0.1
+            self.Accel.Y = 0.25
         if(dir == Direc.LEFT):
-            self.Accel.X = -0.1
+            self.Accel.X = -0.25
         if(dir == Direc.RIGHT):
-            self.Accel.X = 0.1 
+            self.Accel.X = 0.25
 
     def stopAccelToward(self, dir):
         if(dir == Direc.UP):
@@ -35,13 +37,20 @@ class Rikishi(Circle):
         if(dir == Direc.RIGHT):
             self.Accel.X = 0
 
+    def transferMomentum(self, other):
+        return -1
+
+    def stopMov(self):
+        self.Speed  = Speed2D(0,0)        
+        self.Accel  = Acceleration2D(0,0)
+
     def process(self):
         self.Speed.addVector(self.Accel)
         self.Centre.X += self.Speed.X
         self.Centre.Y += self.Speed.Y
 
     def render(self, screen):
-        pygame.draw.circle(screen, color, (self.Centre.X, self.Centre.Y), self.Radius)
+        pygame.draw.circle(screen, self.Color, self.Centre.toTuple(), self.Radius)
 
     def __str__(self):
         return "Rikishi at {};Radius = {}; Speed = {}; Acceleration = {}; Color = {}".format(
@@ -57,7 +66,6 @@ class Rikishi(Circle):
                                 int(string[string.find('Rikishi at (')+12:string.find(',')]),
                                 int(string[string.find(',')+1: string.find(')')])
                                 )
-
         self.Radius = int(string[string.find('Radius = ')+9: string.find(';', string.find('Radius = '))])
         self.Speed = Speed2D(
                                 int(string[string.find('Speed = (')+9:string.find(',', string.find('Speed = ('))]),
@@ -67,7 +75,7 @@ class Rikishi(Circle):
                                 int(string[string.find('Acceleration = (')+16:string.find(',', string.find('Acceleration = ('))]),
                                 int(string[string.find(',',string.find('Acceleration = ('))+1:string.find(')',string.find('Acceleration = ('))])
                             )
-        self.Color = (  
+        self.Color = (
                         int(string[string.find('Color = (')+9:string.find(',', string.find('Color = ('))]),
                         int(string[string.find(',', string.find('Color = ('))+1: string.find(',', string.find(',', string.find('Color = ('))+1)]),
                         int(string[string.find(',', string.find(',', string.find('Color = ('))+1)+1: string.find(')', string.find(',', string.find('Color = ('))+1)])
