@@ -46,8 +46,6 @@ class Rikishi(Circle):
 
     def process(self):
         self.Speed.addVector(self.Accel)
-        self.Centre.X += self.Speed.X
-        self.Centre.Y += self.Speed.Y
 
     def render(self, screen):
         pygame.draw.circle(screen, self.Color, self.Centre.toTuple(), self.Radius)

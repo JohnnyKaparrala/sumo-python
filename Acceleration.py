@@ -14,12 +14,9 @@ class Vector():
         self.X -= other.X
         self.Y -= other.Y
 
-    def negateVector(self):
+    def negativateVector(self):
         self.X = -self.X
         self.Y = -self.Y
-
-    def __str__(self):
-        return "({},{})".format(self.X, self.Y)
 
 
 class Acceleration2D(Vector):
