@@ -19,13 +19,13 @@ class Rikishi(Circle):
 
     def accelToward(self, dir):
         if(dir == Direc.UP):
-            self.Accel.Y = -0.25
+            self.Accel.Y = -0.1
         if(dir == Direc.DOWN):
-            self.Accel.Y = 0.25
+            self.Accel.Y = 0.1
         if(dir == Direc.LEFT):
-            self.Accel.X = -0.25
+            self.Accel.X = -0.1
         if(dir == Direc.RIGHT):
-            self.Accel.X = 0.25
+            self.Accel.X = 0.1
 
     def stopAccelToward(self, dir):
         if(dir == Direc.UP):
@@ -38,14 +38,17 @@ class Rikishi(Circle):
             self.Accel.X = 0
 
     def transferMomentum(self, other):
-        return -1
+        #errado
+        self.Speed.subtractVector(other.Speed)
 
     def stopMov(self):
         self.Speed  = Speed2D(0,0)        
         self.Accel  = Acceleration2D(0,0)
 
     def process(self):
-        self.Speed.addVector(self.Accel)
+        self.Speed.addVector(self.Accel)       
+        self.Centre.X += self.Speed.X
+        self.Centre.Y += self.Speed.Y
 
     def render(self, screen):
         pygame.draw.circle(screen, self.Color, self.Centre.toTuple(), self.Radius)

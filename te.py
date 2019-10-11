@@ -12,7 +12,7 @@ riki1 = Rikishi(pos = Position2D(170, 20))
 riki2 = Rikishi(pos = Position2D(170, 280))
 
 while True:
-    clock.tick(10)
+    clock.tick(30)
 
     #Events
     for event in pygame.event.get():
@@ -37,8 +37,8 @@ while True:
 
     #Processing
     if(riki1.hasCollision(riki2)):
-        riki1.stopMov()
-        riki2.stopMov()
+        riki1.transferMomentum(riki2)
+        riki2.transferMomentum(riki1)
 
     riki1.process()
     riki2.process()
