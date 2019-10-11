@@ -14,6 +14,9 @@ class Vector():
         self.X -= other.X
         self.Y -= other.Y
 
+    def __str__(self):
+        return "({},{})".format(self.X, self.Y)
+
 
 class Acceleration2D(Vector):
     def __init__(self,

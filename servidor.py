@@ -29,29 +29,31 @@ def broadcast (conteudo):
             pass
 def game_loop ():
     while True:
-        for ip in rikishis:
-            if comandos_guardados_dos_rikishis[str(address)][ActCon.UP]:
-                rikishis[ip].accelToward(Directions.UP)
-                comandos_guardados_dos_rikishis[str(address)][ActCon.UP] = False
+        for ip in list(rikishis):
+            add = str(ip)
+            print (str(comandos_guardados_dos_rikishis[add]))
+            if comandos_guardados_dos_rikishis[add)][ActCon.UP]:
+                rikishis[add].accelToward(Directions.UP)
+                comandos_guardados_dos_rikishis[add][ActCon.UP] = False
             else:
-                rikishis[ip].stopAccelToward(Directions.UP)
-            if comandos_guardados_dos_rikishis[str(address)][ActCon.LEFT]:
-                rikishis[ip].accelToward(Directions.LEFT)
-                comandos_guardados_dos_rikishis[str(address)][ActCon.LEFT] = False
+                rikishis[add].stopAccelToward(Directions.UP)
+            if comandos_guardados_dos_rikishis[add][ActCon.LEFT]:
+                rikishis[add].accelToward(Directions.LEFT)
+                comandos_guardados_dos_rikishis[add][ActCon.LEFT] = False
             else:
-                rikishis[ip].stopAccelToward(Directions.LEFT)
-            if comandos_guardados_dos_rikishis[str(address)][ActCon.DOWN]:
-                rikishis[ip].accelToward(Directions.DOWN)
-                comandos_guardados_dos_rikishis[str(address)][ActCon.DOWN] = False
+                rikishis[add].stopAccelToward(Directions.LEFT)
+            if comandos_guardados_dos_rikishis[add][ActCon.DOWN]:
+                rikishis[add].accelToward(Directions.DOWN)
+                comandos_guardados_dos_rikishis[add][ActCon.DOWN] = False
             else:
-                rikishis[ip].stopAccelToward(Directions.DOWN)
-            if comandos_guardados_dos_rikishis[str(address)][ActCon.RIGHT]:
-                rikishis[ip].accelToward(Directions.RIGHT)
-                comandos_guardados_dos_rikishis[str(address)][ActCon.RIGHT] = False
+                rikishis[add].stopAccelToward(Directions.DOWN)
+            if comandos_guardados_dos_rikishis[add][ActCon.RIGHT]:
+                rikishis[add].accelToward(Directions.RIGHT)
+                comandos_guardados_dos_rikishis[add][ActCon.RIGHT] = False
             else:
-                rikishis[ip].stopAccelToward(Directions.RIGHT)
+                rikishis[add].stopAccelToward(Directions.RIGHT)
 
-            rikishis[ip].process()
+            rikishis[add].process()
 
 lop = Thread(target = game_loop, args = ())
 lop.start()
@@ -60,7 +62,7 @@ while True:
         message, address = server_socket.recvfrom(1024)
         mes = message.decode()
         tipo = mes.split(":")[0]
-        comando = mes.split(":")[0]
+        comando = mes.split(":")[1]
         
         print ("msg de " + str(address) + "; msg: " + mes)
         if (address not in enderecos_ip):
@@ -69,14 +71,16 @@ while True:
             print ("endereco " + str(address) + " adicionado")
 
         if tipo == "com":
-            if comando == Coms.ENTRAR:
+            if int(comando) == Coms.ENTRAR:
                 rikishis[str(address)] = Rikishi(r = 60, pos=Position2D(0,0), color = (155,0,0))
                 comandos_guardados_dos_rikishis[str(address)] = [False] * ActCon.QTD_ACOES
-                broadcast(("gobj:" + str(rikishis)).encode())
+                print(str(rikishis[str(address)]))
+                broadcast(("gobj:" + str(rikishis[str(address)])).encode())
         elif tipo == "act":
+            print("acao" + comando)
             #atualiza os objetos do game baseado na acao
             comandos_guardados_dos_rikishis[str(address)][int(comando)] = True
-            print(enderecos_ip)
+
             broadcast(mes.encode())
 
     except socket.timeout:

@@ -3,6 +3,8 @@ import time
 import socket
 from enums import *
 from threading import Thread
+from Rikishi import Rikishi
+from Position import Position2D
 
 pygame.init()
 screen = pygame.display.set_mode((400, 300))
@@ -22,7 +24,7 @@ ADDR_SERV = "177.220.18.65"#177.220.18.66
 PORT_SERV = 12000
 ADDR = (ADDR_SERV, PORT_SERV)
 
-rikishis = {}
+rikishis = []
 
 #pygame.display.iconify()
 
@@ -45,6 +47,10 @@ def ouvir_do_serv():
                 if comando.isdigit():
                     acoes[int(comando)] = True
             elif tipo == "gobj":
+                aux = Rikishi(r = 60, pos=Position2D(0,0), color = (155,0,0))
+                print("rikishi inserido")
+                aux.fromStr(comando)
+                rikishis.append(aux)
                 #rikishis[ip] = novo rikishi
                 pass
         except socket.timeout:
@@ -65,10 +71,9 @@ while not done:
     if pressed[pygame.K_DOWN]: mandar_pro_serv(("act:" + str(actCon.DOWN)).encode())
     if pressed[pygame.K_LEFT]: mandar_pro_serv(("act:" + str(actCon.LEFT)).encode())
     if pressed[pygame.K_RIGHT]: mandar_pro_serv(("act:" + str(actCon.RIGHT)).encode())
-    
-    screen.fill((0, 0, 0))
-    color = (255, 100, 0)
-    pygame.draw.rect(screen, color, pygame.Rect(x, y, 60, 60))
-    
-    pygame.display.flip()
+
+    for bola in list(rikishis):
+        screen.fill((0, 0, 0))
+        bola.render(screen)
+        pygame.display.flip()
     clock.tick(60)
