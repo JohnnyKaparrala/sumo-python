@@ -19,7 +19,7 @@ class Rikishi(Circle):
 
     def accelToward(self, dir):
         if(not isinstance(dir, Direc)):
-            raise TypeError("The direction have to be a Directions obj")
+            raise TypeError("The direction has to be a Directions obj")
 
         if(dir == Direc.UP):
             self.Accel.Y = -0.1
@@ -32,7 +32,7 @@ class Rikishi(Circle):
 
     def stopAccelToward(self, dir):
         if(not isinstance(dir, Direc)):
-            raise TypeError("The direction have to be a Directions obj")
+            raise TypeError("The direction has to be a Directions obj")
 
         if(dir == Direc.UP):
             self.Accel.Y = 0
