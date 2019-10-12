@@ -1,5 +1,5 @@
 from Directions import Directions as Direc
-from Acceleration import Acceleration2D, Speed2D
+from Vector import Vector2D
 from Circle import Circle
 from Position import Position2D
 import pygame
@@ -11,13 +11,16 @@ class Rikishi(Circle):
                  r=20, #radius in pixels
                  color = (155, 0, 0)
     ):
-        self.Centre = pos                 #(pixel, pixel)
-        self.Radius = r                   #pixel
-        self.Speed  = Speed2D(0,0)        #pixel/update
-        self.Accel  = Acceleration2D(0,0) #pixel/update**2
+        self.Centre = pos           #(pixel, pixel)
+        self.Radius = r             #pixel
+        self.Speed  = Vector2D(0,0) #pixel/update
+        self.Accel  = Vector2D(0,0) #pixel/update**2
         self.Color  = color
 
     def accelToward(self, dir):
+        if(not isinstance(dir, Direc)):
+            raise TypeError("The direction have to be a Directions obj")
+
         if(dir == Direc.UP):
             self.Accel.Y = -0.1
         if(dir == Direc.DOWN):
@@ -28,6 +31,9 @@ class Rikishi(Circle):
             self.Accel.X = 0.1
 
     def stopAccelToward(self, dir):
+        if(not isinstance(dir, Direc)):
+            raise TypeError("The direction have to be a Directions obj")
+
         if(dir == Direc.UP):
             self.Accel.Y = 0
         if(dir == Direc.DOWN):
@@ -38,15 +44,18 @@ class Rikishi(Circle):
             self.Accel.X = 0
 
     def transferMomentum(self, other):
-        #errado
-        self.Speed.subtractVector(other.Speed)
+        #errado: sujeito a modificações
+        if (not isinstance(other, Rikishi)):
+            raise TypeError("Needs to be Rikishi obj")
+        
+        self.Speed = self.Speed - other.Speed
 
     def stopMov(self):
-        self.Speed  = Speed2D(0,0)        
-        self.Accel  = Acceleration2D(0,0)
+        self.Speed  = Vector2D(0,0)
+        self.Accel  = Vector2D(0,0)
 
     def process(self):
-        self.Speed.addVector(self.Accel)       
+        self.Speed = self.Speed + self.Accel   
         self.Centre.X += self.Speed.X
         self.Centre.Y += self.Speed.Y
 
@@ -68,11 +77,11 @@ class Rikishi(Circle):
                                 int(string[string.find(',')+1: string.find(')')])
                                 )
         self.Radius = int(string[string.find('Radius = ')+9: string.find(';', string.find('Radius = '))])
-        self.Speed = Speed2D(
+        self.Speed = Vector2D(
                                 int(string[string.find('Speed = (')+9:string.find(',', string.find('Speed = ('))]),
                                 int(string[string.find(',',string.find('Speed = ('))+1:string.find(')',string.find('Speed = ('))])
                             )
-        self.Accel = Speed2D(
+        self.Accel = Vector2D(
                                 int(string[string.find('Acceleration = (')+16:string.find(',', string.find('Acceleration = ('))]),
                                 int(string[string.find(',',string.find('Acceleration = ('))+1:string.find(')',string.find('Acceleration = ('))])
                             )
