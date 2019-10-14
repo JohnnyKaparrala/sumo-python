@@ -48,8 +48,8 @@ class Rikishi(Circle):
         if (not isinstance(other, Rikishi)):
             raise TypeError("Needs to be Rikishi obj")
         
-        other.Speed = other.Speed + self.Speed*0.5
-        self.Speed = -self.Speed*0.5
+        other.Speed += self.Speed*1
+        self.Speed = -self.Speed*1
 
     def stopMov(self):
         self.Speed  = Vector2D(0,0)

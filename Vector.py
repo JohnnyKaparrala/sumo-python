@@ -66,5 +66,5 @@ class Vector2D():
     def decompose(self, teta):
         return (math.sin(teta)*self, math.cos(teta)*self)
         
-x = Vector2D()
-print(x)
+#x = Vector2D()
+#print(x)
