@@ -48,7 +48,8 @@ class Rikishi(Circle):
         if (not isinstance(other, Rikishi)):
             raise TypeError("Needs to be Rikishi obj")
         
-        self.Speed = self.Speed - other.Speed        
+        other.Speed = other.Speed + self.Speed*0.5
+        self.Speed = -self.Speed*0.5
 
     def stopMov(self):
         self.Speed  = Vector2D(0,0)
@@ -60,7 +61,7 @@ class Rikishi(Circle):
         self.Centre.Y += self.Speed.Y
 
     def render(self, screen):
-        pygame.draw.circle(screen, self.Color, self.Centre.toTuple(), self.Radius)
+        pygame.draw.circle(screen, self.Color, self.Centre.toTuple(), int(self.Radius))
 
     def __str__(self):
         return "Rikishi at {};Radius = {}; Speed = {}; Acceleration = {}; Color = {}".format(
@@ -93,13 +94,13 @@ class Rikishi(Circle):
 
 
 #testing Rikishi constructor and toString
-x = Rikishi(r = 5, pos = Position2D(5.9,5.9), color=(5,5,5))
-print(x)
+"""x = Rikishi(r = 5, pos = Position2D(5.9,5.9), color=(5,5,5))
+print(x)"""
 
 #tests fromStr def
-y = Rikishi()
+"""y = Rikishi()
 print(y)
 y.fromStr(x.__str__())
-print(y)
+print(y)"""
 
 #

@@ -8,7 +8,7 @@ pygame.init()
 screen = pygame.display.set_mode((400, 300))
 clock = pygame.time.Clock()
 
-riki1 = Rikishi(pos = Position2D(170, 20))
+riki1 = Rikishi(pos = Position2D(170, 70))
 riki2 = Rikishi(pos = Position2D(170, 280))
 
 while True:

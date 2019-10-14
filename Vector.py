@@ -31,7 +31,7 @@ class Vector2D():
         return ret
 
     def __mul__(self, other):
-        if (not isinstance(other, int)):
+        if ((not isinstance(other, float)) and (not isinstance(other, int))):
             raise TypeError("Multiplication not supported")
 
         ret = Vector2D(self.X, self.Y)
@@ -41,7 +41,7 @@ class Vector2D():
         return ret
 
     def __div__(self, other):
-        if (not isinstance(other, int)):
+        if ((not isinstance(other, float)) and (not isinstance(other, int))):
             raise TypeError("Division not supported")
 
         ret = Vector2D(self.X, self.Y)
