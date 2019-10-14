@@ -8,7 +8,7 @@ class Rikishi(Circle):
     
     def __init__(self,
                  pos=Position2D(0,0),
-                 r=20, #radius in pixels
+                 r=20.0, #radius in pixels
                  color = (155, 0, 0)
     ):
         self.Centre = pos           #(pixel, pixel)
@@ -48,7 +48,7 @@ class Rikishi(Circle):
         if (not isinstance(other, Rikishi)):
             raise TypeError("Needs to be Rikishi obj")
         
-        self.Speed = self.Speed - other.Speed
+        self.Speed = self.Speed - other.Speed        
 
     def stopMov(self):
         self.Speed  = Vector2D(0,0)
@@ -73,17 +73,17 @@ class Rikishi(Circle):
 
     def fromStr(self, string):
         self.Centre = Position2D(
-                                int(string[string.find('Rikishi at (')+12:string.find(',')]),
-                                int(string[string.find(',')+1: string.find(')')])
+                                float(string[string.find('Rikishi at (')+12:string.find(',')]),
+                                float(string[string.find(',')+1: string.find(')')])
                                 )
-        self.Radius = int(string[string.find('Radius = ')+9: string.find(';', string.find('Radius = '))])
+        self.Radius = float(string[string.find('Radius = ')+9: string.find(';', string.find('Radius = '))])
         self.Speed = Vector2D(
-                                int(string[string.find('Speed = (')+9:string.find(',', string.find('Speed = ('))]),
-                                int(string[string.find(',',string.find('Speed = ('))+1:string.find(')',string.find('Speed = ('))])
+                                float(string[string.find('Speed = (')+9:string.find(',', string.find('Speed = ('))]),
+                                float(string[string.find(',',string.find('Speed = ('))+1:string.find(')',string.find('Speed = ('))])
                             )
         self.Accel = Vector2D(
-                                int(string[string.find('Acceleration = (')+16:string.find(',', string.find('Acceleration = ('))]),
-                                int(string[string.find(',',string.find('Acceleration = ('))+1:string.find(')',string.find('Acceleration = ('))])
+                                float(string[string.find('Acceleration = (')+16:string.find(',', string.find('Acceleration = ('))]),
+                                float(string[string.find(',',string.find('Acceleration = ('))+1:string.find(')',string.find('Acceleration = ('))])
                             )
         self.Color = (
                         int(string[string.find('Color = (')+9:string.find(',', string.find('Color = ('))]),
@@ -93,13 +93,13 @@ class Rikishi(Circle):
 
 
 #testing Rikishi constructor and toString
-"""x = Rikishi(r = 5, pos = Position2D(5,5), color=(5,5,5))
-print(x)"""
+x = Rikishi(r = 5, pos = Position2D(5.9,5.9), color=(5,5,5))
+print(x)
 
 #tests fromStr def
-"""y = Rikishi()
+y = Rikishi()
 print(y)
 y.fromStr(x.__str__())
-print(y)"""
+print(y)
 
 #

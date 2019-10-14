@@ -2,14 +2,20 @@ from Position import Position2D
 class Circle():
     def __init__(self,
                  pos=Position2D(0,0),
-                 r=20, #radius in pixels
+                 r=20.0, #radius in pixels
     ):
         self.Centre = pos
-        self.Radius = Radius
+        self.Radius = r
     
     def distance(self, other):
-        return (self.Centre.distance(other.Centre)-(self.Radius + other.Radius))
+        if isinstance(other, Circle):
+            return (self.Centre.distance(other.Centre)-(self.Radius + other.Radius))
+        else:
+            raise TypeError("Colission not supported for this type")
 
     def hasCollision(self, other):
-        return self.distance(other)<=0
+        if isinstance(other, Circle):
+            return self.distance(other)<=0
+        else:
+            raise TypeError("Colission not supported for this type")
     

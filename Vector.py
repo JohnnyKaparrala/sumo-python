@@ -62,3 +62,9 @@ class Vector2D():
 
     def __str__(self):
         return "({},{})".format(self.X, self.Y)
+
+    def decompose(self, teta):
+        return (math.sin(teta)*self, math.cos(teta)*self)
+        
+x = Vector2D()
+print(x)
