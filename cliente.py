@@ -20,7 +20,7 @@ coms = Coms()
 
 acoes = [False] * (actCon.QTD_ACOES)
 
-ADDR_SERV = "177.220.18.22"#177.220.18.66
+ADDR_SERV = "177.220.18.65"#177.220.18.66
 PORT_SERV = 12000
 ADDR = (ADDR_SERV, PORT_SERV)
 
@@ -51,9 +51,9 @@ def ouvir_do_serv():
                 rikishis[comando.split("/")[0]].Centre = (int(comando.split("/")[1]) , int(comando.split("/")[2]))
             elif tipo == "gobj":
                 aux = Rikishi(r = 60, pos=Position2D(0,0), color = (155,0,0))
-                print("rikishi inserido")
                 aux.fromStr(comando.split("/")[0])
                 rikishis[comando.split("/")[0]] = aux
+                print("rikishi inserido")
                 #rikishis[ip] = novo rikishi
                 pass
             

@@ -56,8 +56,9 @@ def game_loop ():
                 rikishis[add].stopAccelToward(Directions.RIGHT)
 
             rikishis[add].process()
-            broadcast(("rpos:" + str(add) + "/" + str(rikishis[add].Centre.X) + "/" + str(rikishis[add].Centre.Y)).encode())
 
+            broadcast(("rpos:" + str(add) + "/" + str(rikishis[add].Centre.X) + "/" + str(rikishis[add].Centre.Y)).encode())
+            print(("rpos:" + str(add) + "/" + str(rikishis[add].Centre.X) + "/" + str(rikishis[add].Centre.Y))
 
 lop = Thread(target = game_loop, args = ())
 lop.start()
@@ -86,7 +87,6 @@ while True:
             comandos_guardados_dos_rikishis[str(address)][int(comando)] = True
             print(comandos_guardados_dos_rikishis[str(address)][int(comando)])
             print(comandos_guardados_dos_rikishis[str(address)])
-
 
     except socket.timeout:
         if(recebendo):
