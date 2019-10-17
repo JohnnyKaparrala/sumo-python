@@ -1,4 +1,5 @@
 import socket
+import pygame
 from Rikishi import Rikishi
 from Position import Position2D
 from enums import *
@@ -20,6 +21,7 @@ server_socket.settimeout(1)
 rikishis = {}
 rikishi_pode_receber = {}
 comandos_guardados_dos_rikishis = {}
+clock = pygame.time.Clock()
 
 def broadcast (conteudo):
     #print("b")
@@ -28,42 +30,40 @@ def broadcast (conteudo):
         
         try:
             #if rikishi_pode_receber[str(add)]:
-            
+            print(conteudo.decode())
             server_socket.sendto(conteudo, add)
         except:
             #enderecos_ip.remove(add)
             pass
-            
+
 def game_loop ():
     while True:
-        for ip in list(rikishis):
-            add = str(ip)
+        for add in rikishis:
             #print(comandos_guardados_dos_rikishis[add])
             if comandos_guardados_dos_rikishis[add][ActCon.UP]:
                 rikishis[add].accelToward(Directions.UP)
-                comandos_guardados_dos_rikishis[add][ActCon.UP] = False
-            else:
-                rikishis[add].stopAccelToward(Directions.UP)
-            if comandos_guardados_dos_rikishis[add][ActCon.LEFT]:
-                rikishis[add].accelToward(Directions.LEFT)
-                comandos_guardados_dos_rikishis[add][ActCon.LEFT] = False
-            else:
-                rikishis[add].stopAccelToward(Directions.LEFT)
-            if comandos_guardados_dos_rikishis[add][ActCon.DOWN]:
+            elif comandos_guardados_dos_rikishis[add][ActCon.DOWN]:
                 rikishis[add].accelToward(Directions.DOWN)
-                comandos_guardados_dos_rikishis[add][ActCon.DOWN] = False
             else:
                 rikishis[add].stopAccelToward(Directions.DOWN)
-            if comandos_guardados_dos_rikishis[add][ActCon.RIGHT]:
+            
+            if comandos_guardados_dos_rikishis[add][ActCon.LEFT]:
+                rikishis[add].accelToward(Directions.LEFT)
+            elif comandos_guardados_dos_rikishis[add][ActCon.RIGHT]:
                 rikishis[add].accelToward(Directions.RIGHT)
-                comandos_guardados_dos_rikishis[add][ActCon.RIGHT] = False
             else:
                 rikishis[add].stopAccelToward(Directions.RIGHT)
 
-            #rikishis[add].process()
+            comandos_guardados_dos_rikishis[add][ActCon.UP] = False
+            comandos_guardados_dos_rikishis[add][ActCon.DOWN] = False
+            comandos_guardados_dos_rikishis[add][ActCon.LEFT] = False
+            comandos_guardados_dos_rikishis[add][ActCon.RIGHT] = False
+
+            rikishis[add].process()
 
             broadcast(("rpos:" + str(add) + "/" + str(rikishis[add].Centre.X) + "/" + str(rikishis[add].Centre.Y)).encode())
-            #print(("rpos:" + str(add) + "/" + str(rikishis[add].Centre.X) + "/" + str(rikishis[add].Centre.Y)))
+
+        clock.tick(60)
 
 t_loop = Thread(target = game_loop, args = ())
 t_loop.start()

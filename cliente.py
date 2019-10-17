@@ -7,18 +7,16 @@ from Rikishi import Rikishi
 from Position import Position2D
 
 pygame.init()
-screen = pygame.display.set_mode((400, 300))
+screen = pygame.display.set_mode((800, 600))
 done = False
 
 
 clock = pygame.time.Clock()
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-client_socket.settimeout(0.1)  
+client_socket.settimeout(0.01)  
 
 actCon = ActCon()
 coms = Coms()
-
-acoes = [False] * (actCon.QTD_ACOES)
 
 ADDR_SERV = "177.220.18.65"#177.220.18.66
 PORT_SERV = 12000
@@ -41,23 +39,24 @@ def ouvir_do_serv():
             mes = data.decode()
             tipo = mes.split(":")[0]
             comando = mes.split(":")[1]
+            aux_com = comando
+            
 
-            if tipo == "act":
-                #atualiza os objetos do game baseado na acao
-                if comando.isdigit():
-                    acoes[int(comando)] = True
-            elif tipo == "rpos":
-                rikishis[comando.split("/")[0]].Centre = (int(comando.split("/")[1]) , int(comando.split("/")[2]))
+            if tipo == "rpos":
+                x_pos = float(aux_com.split("/")[1])
+                y_pos = float(aux_com.split("/")[2])
+                rikishis[aux_com.split("/")[0]].Centre = Position2D(x_pos, y_pos)
+                #print(aux_com.split("/")[1] + " " + aux_com.split("/")[2])
+                #print ("nova pos:" + comando)
             elif tipo == "gobj":
-                print(comando)
+                #print(comando)
                 aux = Rikishi(r = 60, pos=Position2D(0,0), color = (155,0,0))
                 aux.fromStr(comando.split("/")[1])
                 rikishis[comando.split("/")[0]] = aux
-                print("rikishi inserido")
+                #print("rikishi inserido")
                 mandar_pro_serv("rec:1".encode())
                 #rikishis[ip] = novo rikishi
-                pass
-            
+
         except:
             continue
 
