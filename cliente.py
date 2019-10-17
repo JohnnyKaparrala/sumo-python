@@ -8,6 +8,8 @@ from Position import Position2D
 
 pygame.init()
 screen = pygame.display.set_mode((800, 600))
+centro = Position2D(x=400,y=300)
+raio = 300
 done = False
 
 
@@ -76,8 +78,9 @@ while not done:
     if pressed[pygame.K_LEFT]: mandar_pro_serv(("act:" + str(actCon.LEFT)).encode())
     if pressed[pygame.K_RIGHT]: mandar_pro_serv(("act:" + str(actCon.RIGHT)).encode())
 
+    screen.fill((0, 0, 0))
+    pygame.draw.circle(screen, (0,0,255), centro.toTuple(), raio, 2)
     for bola in list(rikishis):
-        screen.fill((0, 0, 0))
         rikishis[bola].render(screen)
-        pygame.display.flip()
+    pygame.display.flip()
     clock.tick(60)

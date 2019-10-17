@@ -23,6 +23,12 @@ rikishi_pode_receber = {}
 comandos_guardados_dos_rikishis = {}
 clock = pygame.time.Clock()
 
+dentro_da_sala = 0
+enderecos = []
+
+centro = Position2D(x=400,y=300)
+raio = 300
+
 def broadcast (conteudo):
     #print("b")
     for add in enderecos_ip:#manda as novas prop dos objetos
@@ -35,6 +41,13 @@ def broadcast (conteudo):
         except:
             #enderecos_ip.remove(add)
             pass
+
+def mandar_para_cliente (conteudo, add):
+    try:
+        server_socket.sendto(conteudo, add)
+    except socket.timeout:
+        mandar_para_cliente(conteudo, add)
+        pass
 
 def game_loop ():
     while True:
@@ -59,11 +72,28 @@ def game_loop ():
             comandos_guardados_dos_rikishis[add][ActCon.LEFT] = False
             comandos_guardados_dos_rikishis[add][ActCon.RIGHT] = False
 
+            if dentro_da_sala == 2:
+                print("tem2")
+                riki1 = rikishis[enderecos[0]]
+                riki2 = rikishis[enderecos[1]]
+
+                if(riki1.hasCollision(riki2)):
+                    riki1.transferMomentum(riki2)
+                    riki2.transferMomentum(riki1)
+
+                if(centro.distance(riki1.Centre)> raio):
+                    print("2 ganhou")
+                    exit()
+
+                if(centro.distance(riki2.Centre)> raio):
+                    print("1 ganhou")
+                    exit()
+
             rikishis[add].process()
 
             broadcast(("rpos:" + str(add) + "/" + str(rikishis[add].Centre.X) + "/" + str(rikishis[add].Centre.Y)).encode())
 
-        clock.tick(60)
+        clock.tick(30)
 
 t_loop = Thread(target = game_loop, args = ())
 t_loop.start()
@@ -82,17 +112,23 @@ while True:
 
         if tipo == "com":
             if int(comando) == Coms.ENTRAR:
-                rikishis[str(address)] = Rikishi(r = 60, pos=Position2D(0,0), color = (155,0,0))
+                enderecos.append(str(address))
+                dentro_da_sala += 1
+
+                rikishis[str(address)] = Rikishi(r = 20, pos= Position2D(400,140) if dentro_da_sala == 1 else Position2D(400,460), color = (155,0,0))
                 rikishi_pode_receber[str(address)] = False
                 comandos_guardados_dos_rikishis[str(address)] = [False] * ActCon.QTD_ACOES
                 print(str(rikishis[str(address)]))
                 broadcast(("gobj:" + str(address) + "/" + str(rikishis[str(address)])).encode())
+                for add_cliente in rikishis:
+                    if (add_cliente != str(address)):
+                        mandar_para_cliente(("gobj:" + str(add_cliente) + "/" + str(rikishis[str(add_cliente)])).encode(),address)
         elif tipo == "act":
-            print("acao: " + comando)
+            #print("acao: " + comando)
             #atualiza os objetos do game baseado na acao
             comandos_guardados_dos_rikishis[str(address)][int(comando)] = True
-            print(comandos_guardados_dos_rikishis[str(address)][int(comando)])
-            print(comandos_guardados_dos_rikishis[str(address)])
+            #print(comandos_guardados_dos_rikishis[str(address)][int(comando)])
+            #print(comandos_guardados_dos_rikishis[str(address)])
         elif tipo == "rec":
             rikishi_pode_receber[str(address)] = True
 
