@@ -61,7 +61,7 @@ class Rikishi(Circle):
         self.Centre.Y += self.Speed.Y
 
     def render(self, screen):
-        pygame.draw.circle(screen, self.Color, self.Centre.toTuple(), int(self.Radius))
+        pygame.draw.circle(screen, self.Color, self.Centre, int(self.Radius))
 
     def __str__(self):
         return "Rikishi at {};Radius = {}; Speed = {}; Acceleration = {}; Color = {}".format(

@@ -47,17 +47,18 @@ def ouvir_do_serv():
                 if comando.isdigit():
                     acoes[int(comando)] = True
             elif tipo == "rpos":
-                print(comando)
                 rikishis[comando.split("/")[0]].Centre = (int(comando.split("/")[1]) , int(comando.split("/")[2]))
             elif tipo == "gobj":
+                print(comando)
                 aux = Rikishi(r = 60, pos=Position2D(0,0), color = (155,0,0))
-                aux.fromStr(comando.split("/")[0])
+                aux.fromStr(comando.split("/")[1])
                 rikishis[comando.split("/")[0]] = aux
                 print("rikishi inserido")
+                mandar_pro_serv("rec:1".encode())
                 #rikishis[ip] = novo rikishi
                 pass
             
-        except socket.timeout:
+        except:
             continue
 
 ouvir = Thread(target = ouvir_do_serv, args = ())
@@ -78,6 +79,6 @@ while not done:
 
     for bola in list(rikishis):
         screen.fill((0, 0, 0))
-        bola.render(screen)
+        rikishis[bola].render(screen)
         pygame.display.flip()
     clock.tick(60)

@@ -16,14 +16,19 @@ except OSError:
 print("esperando o cliente..")
 recebendo = False
 
-server_socket.settimeout(0.1)
+server_socket.settimeout(1)
 rikishis = {}
+rikishi_pode_receber = {}
 comandos_guardados_dos_rikishis = {}
 
 def broadcast (conteudo):
     #print("b")
     for add in enderecos_ip:#manda as novas prop dos objetos
+        #print(add)
+        
         try:
+            #if rikishi_pode_receber[str(add)]:
+            
             server_socket.sendto(conteudo, add)
         except:
             #enderecos_ip.remove(add)
@@ -55,13 +60,13 @@ def game_loop ():
             else:
                 rikishis[add].stopAccelToward(Directions.RIGHT)
 
-            rikishis[add].process()
+            #rikishis[add].process()
 
             broadcast(("rpos:" + str(add) + "/" + str(rikishis[add].Centre.X) + "/" + str(rikishis[add].Centre.Y)).encode())
-            print(("rpos:" + str(add) + "/" + str(rikishis[add].Centre.X) + "/" + str(rikishis[add].Centre.Y))
+            #print(("rpos:" + str(add) + "/" + str(rikishis[add].Centre.X) + "/" + str(rikishis[add].Centre.Y)))
 
-lop = Thread(target = game_loop, args = ())
-lop.start()
+t_loop = Thread(target = game_loop, args = ())
+t_loop.start()
 while True:
     try:
         message, address = server_socket.recvfrom(1024)
@@ -78,6 +83,7 @@ while True:
         if tipo == "com":
             if int(comando) == Coms.ENTRAR:
                 rikishis[str(address)] = Rikishi(r = 60, pos=Position2D(0,0), color = (155,0,0))
+                rikishi_pode_receber[str(address)] = False
                 comandos_guardados_dos_rikishis[str(address)] = [False] * ActCon.QTD_ACOES
                 print(str(rikishis[str(address)]))
                 broadcast(("gobj:" + str(address) + "/" + str(rikishis[str(address)])).encode())
@@ -87,6 +93,8 @@ while True:
             comandos_guardados_dos_rikishis[str(address)][int(comando)] = True
             print(comandos_guardados_dos_rikishis[str(address)][int(comando)])
             print(comandos_guardados_dos_rikishis[str(address)])
+        elif tipo == "rec":
+            rikishi_pode_receber[str(address)] = True
 
     except socket.timeout:
         if(recebendo):
