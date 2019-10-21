@@ -20,7 +20,7 @@ client_socket.settimeout(0.01)
 actCon = ActCon()
 coms = Coms()
 
-ADDR_SERV = "177.220.18.65"#177.220.18.66
+ADDR_SERV = "177.220.18.79"#177.220.18.66
 PORT_SERV = 12000
 ADDR = (ADDR_SERV, PORT_SERV)
 
@@ -78,9 +78,10 @@ while not done:
     if pressed[pygame.K_LEFT]: mandar_pro_serv(("act:" + str(actCon.LEFT)).encode())
     if pressed[pygame.K_RIGHT]: mandar_pro_serv(("act:" + str(actCon.RIGHT)).encode())
 
-    screen.fill((0, 0, 0))
-    pygame.draw.circle(screen, (0,0,255), centro.toTuple(), raio, 2)
+    screen.fill((185,122,87))
+    pygame.draw.circle(screen, (196,138,111), centro.toTuple(), centro.Y-1)
+    pygame.draw.circle(screen, (99,62,41), centro.toTuple(), raio, 4)
     for bola in list(rikishis):
         rikishis[bola].render(screen)
     pygame.display.flip()
-    clock.tick(60)
+    clock.tick(30)
