@@ -72,7 +72,7 @@ def game_loop ():
             comandos_guardados_dos_rikishis[add][ActCon.LEFT] = False
             comandos_guardados_dos_rikishis[add][ActCon.RIGHT] = False
 
-            
+            '''
             if dentro_da_sala == 2:
                 print("tem2")
                 riki1 = rikishis[enderecos[0]]
@@ -89,9 +89,9 @@ def game_loop ():
                 if(centro.distance(riki2.Centre)> raio):
                     print("1 ganhou")
                     exit()
-
+            '''
             rikishis[add].process()
-
+            
             broadcast(("rpos:" + str(add) + "/" + str(rikishis[add].Centre.X) + "/" + str(rikishis[add].Centre.Y)).encode())
 
         clock.tick(30)
@@ -113,6 +113,7 @@ while True:
 
         if tipo == "com":
             if int(comando) == Coms.ENTRAR:
+                recebendo = True
                 enderecos.append(str(address))
                 dentro_da_sala += 1
 
