@@ -51,7 +51,7 @@ def mandar_para_cliente (conteudo, add):
 
 def game_loop ():
     while True:
-        for add in rikishis:
+        for add in list(rikishis):
             #print(comandos_guardados_dos_rikishis[add])
             if comandos_guardados_dos_rikishis[add][ActCon.UP]:
                 rikishis[add].accelToward(Directions.UP)
@@ -72,6 +72,7 @@ def game_loop ():
             comandos_guardados_dos_rikishis[add][ActCon.LEFT] = False
             comandos_guardados_dos_rikishis[add][ActCon.RIGHT] = False
 
+            
             if dentro_da_sala == 2:
                 print("tem2")
                 riki1 = rikishis[enderecos[0]]
@@ -135,3 +136,14 @@ while True:
     except socket.timeout:
         if(recebendo):
             print ("um pacote foi perdido")
+    except:
+        for add in enderecos_ip:
+            try:
+                enderecos_ip.remove(add)
+                    
+                del rikishis[str(add)]
+                del rikishi_pode_receber[str(add)]
+                del comandos_guardados_dos_rikishis[str(add)]
+                dentro_da_sala -=1
+            except:
+                break
