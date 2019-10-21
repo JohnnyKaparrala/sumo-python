@@ -42,7 +42,6 @@ def ouvir_do_serv():
             tipo = mes.split(":")[0]
             comando = mes.split(":")[1]
             aux_com = comando
-            
 
             if tipo == "rpos":
                 x_pos = float(aux_com.split("/")[1])
@@ -54,6 +53,7 @@ def ouvir_do_serv():
                 #print(comando)
                 aux = Rikishi(r = 60, pos=Position2D(0,0), color = (155,0,0))
                 aux.fromStr(comando.split("/")[1])
+                #aux.convert_image()
                 rikishis[comando.split("/")[0]] = aux
                 #print("rikishi inserido")
                 mandar_pro_serv("rec:1".encode())

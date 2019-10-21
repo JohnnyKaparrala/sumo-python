@@ -3,19 +3,25 @@ from Vector import Vector2D
 from Circle import Circle
 from Position import Position2D
 import pygame
+import os
 
 class Rikishi(Circle):
     
     def __init__(self,
                  pos=Position2D(0,0),
                  r=20.0, #radius in pixels
-                 color = (155, 0, 0)
+                 color = (155, 0, 0),
+                 image_path = "rikishi_verde.png"
     ):
         self.Centre = pos           #(pixel, pixel)
         self.Radius = r             #pixel
         self.Speed  = Vector2D(0,0) #pixel/update
         self.Accel  = Vector2D(0,0) #pixel/update**2
         self.Color  = color
+        self.Image = pygame.image.load(os.path.join(image_path))
+
+    def convert_image ():
+        self.Image.convert()
 
     def accelToward(self, dir):
         if(not isinstance(dir, Direc)):
@@ -61,7 +67,7 @@ class Rikishi(Circle):
         self.Centre.Y += self.Speed.Y
 
     def render(self, screen):
-        pygame.draw.circle(screen, self.Color, self.Centre.toTuple(), int(self.Radius))
+        screen.blit(self.Image, (self.Centre.X - 23, self.Centre.Y - 20))
 
     def __str__(self):
         return "Rikishi at {};Radius = {}; Speed = {}; Acceleration = {}; Color = {}".format(
