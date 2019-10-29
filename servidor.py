@@ -36,7 +36,7 @@ def broadcast (conteudo):
         
         try:
             #if rikishi_pode_receber[str(add)]:
-            print(conteudo.decode())
+            #print(conteudo.decode())
             server_socket.sendto(conteudo, add)
         except:
             #enderecos_ip.remove(add)
@@ -125,6 +125,14 @@ while True:
                 for add_cliente in rikishis:
                     if (add_cliente != str(address)):
                         mandar_para_cliente(("gobj:" + str(add_cliente) + "/" + str(rikishis[str(add_cliente)])).encode(),address)
+            elif int(comando) == Coms.SAIR:
+                enderecos_ip.remove(address)
+                    
+                del rikishis[str(address)]
+                del rikishi_pode_receber[str(address)]
+                del comandos_guardados_dos_rikishis[str(address)]
+                dentro_da_sala -=1
+                broadcast(("saiu:" + str(address)).encode())
         elif tipo == "act":
             #print("acao: " + comando)
             #atualiza os objetos do game baseado na acao
@@ -137,14 +145,3 @@ while True:
     except socket.timeout:
         if(recebendo):
             print ("um pacote foi perdido")
-    except:
-        for add in enderecos_ip:
-            try:
-                enderecos_ip.remove(add)
-                    
-                del rikishis[str(add)]
-                del rikishi_pode_receber[str(add)]
-                del comandos_guardados_dos_rikishis[str(add)]
-                dentro_da_sala -=1
-            except:
-                break

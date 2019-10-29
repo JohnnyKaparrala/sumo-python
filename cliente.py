@@ -12,7 +12,6 @@ centro = Position2D(x=400,y=300)
 raio = 300
 done = False
 
-
 clock = pygame.time.Clock()
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 client_socket.settimeout(0.01)  
@@ -20,7 +19,7 @@ client_socket.settimeout(0.01)
 actCon = ActCon()
 coms = Coms()
 
-ADDR_SERV = "177.220.18.43"#177.220.18.66
+ADDR_SERV = "177.220.18.65"#177.220.18.66
 PORT_SERV = 12000
 ADDR = (ADDR_SERV, PORT_SERV)
 
@@ -58,6 +57,8 @@ def ouvir_do_serv():
                 #print("rikishi inserido")
                 mandar_pro_serv("rec:1".encode())
                 #rikishis[ip] = novo rikishi
+            elif tipo == "saiu":
+                del rikishis[str(comando)]
 
         except:
             continue
@@ -68,6 +69,7 @@ ouvir.start()
 while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            mandar_pro_serv(("com:" + str(coms.SAIR)).encode())
             done = True
         #if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             
