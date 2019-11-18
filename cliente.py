@@ -19,7 +19,7 @@ client_socket.settimeout(0.01)
 actCon = ActCon()
 coms = Coms()
 
-ADDR_SERV = "177.220.18.65"#177.220.18.66
+ADDR_SERV = input("IP_Servidor: ")#"177.220.18.65"#177.220.18.66
 PORT_SERV = 12000
 ADDR = (ADDR_SERV, PORT_SERV)
 
