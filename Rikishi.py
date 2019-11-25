@@ -18,6 +18,8 @@ class Rikishi(Circle):
         self.Speed  = Vector2D(0,0) #pixel/update
         self.Accel  = Vector2D(0,0) #pixel/update**2
         self.Color  = color
+        self.Angle  = 0
+        self.Delta  = 0
         self.Image = pygame.image.load(os.path.join(image_path))
 
     def convert_image ():
@@ -61,13 +63,48 @@ class Rikishi(Circle):
         self.Speed  = Vector2D(0,0)
         self.Accel  = Vector2D(0,0)
 
+
+
     def process(self):
         self.Speed = self.Speed + self.Accel   
         self.Centre.X += self.Speed.X
         self.Centre.Y += self.Speed.Y
 
+        if(self.Accel.X != 0 or self.Accel.Y != 0):
+            print("Acelerando")
+        
+
+        if(self.Accel.X > 0):
+            if(self.Accel.Y > 0):
+                if(self.Angle != 225):
+                    self.Angle = 225
+            elif(self.Accel.Y < 0):
+                if(self.Angle != 315):
+                    self.Angle = 315
+            else:
+                if(self.Angle != 270):
+                    self.Angle = 270
+        elif(self.Accel.X < 0):
+            if(self.Accel.Y > 0):
+                if(self.Angle != 135):
+                    self.Angle = 135
+            elif(self.Accel.Y < 0):
+                if(self.Angle != 45):
+                    self.Angle = 45
+            else:
+                if(self.Angle != 90):
+                    self.Angle = 90
+        else:
+            if(self.Accel.Y > 0):
+                if(self.Angle != 180):
+                    self.Angle = 180
+            elif(self.Accel.Y < 0):
+                if(self.Angle != 0):
+                    self.Angle = 0
+
     def render(self, screen):
-        screen.blit(self.Image, (self.Centre.X - 23, self.Centre.Y - 20))
+        img = pygame.transform.rotate(self.Image,self.Angle)
+        screen.blit(img, (self.Centre.X - 23, self.Centre.Y - 20))
 
     def __str__(self):
         return "Rikishi at {};Radius = {}; Speed = {}; Acceleration = {}; Color = {}".format(
