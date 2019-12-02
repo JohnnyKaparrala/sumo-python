@@ -5,6 +5,36 @@ from Circle import Circle
 from Position import Position2D
 from Directions import Directions as Dirs
 
+import RPi.GPIO as GPIO
+import time
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+
+def turnOnOffPin(pin, on):
+    GPIO.setup(pin, GPIO.OUT)
+    if on:
+        GPIO.output(pin, GPIO.HIGH)
+    else:
+        GPIO.output(pin, GPIO.LOW)
+
+def simulateClick(pin)
+    turnOnOffPin(pin, False)
+    time.sleep(0.01)
+    turnOnOffPin(pin, True)
+
+pins = [ 17, 18, 27 ]
+for pin in pins
+    turnOnOffPin(pin, True)
+
+def blinkLedsSequence():
+    simulateClick(pins[0])
+
+def blinkLedsEvenOdd():
+    simulateClick(pins[1])
+
+def blinkLeds():
+    simulateClick(pins[2])
+
 pygame.init()
 screen = pygame.display.set_mode((400, 300))
 centro = Position2D(x=200,y=150)
@@ -61,10 +91,26 @@ while True:
 
     if(centro.distance(riki1.Centre)> raio):
         print("2 ganhou")
+
+        for i in range(30):
+            blinkLedsSequence()
+            if(i%2 == 1):
+                blinkLedsEvenOdd()
+            if(i%3 == 0):
+                blinkLeds()
+
         exit()
 
     if(centro.distance(riki2.Centre)> raio):
         print("1 ganhou")
+
+        for i in range(30):
+            blinkLeds()
+            if(i%2 == 1):
+                blinkLedsSequence()
+            if(i%3 == 0):
+                blinkLedsEvenOdd()
+
         exit()
 
 
